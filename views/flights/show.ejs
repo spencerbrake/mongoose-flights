@@ -1,0 +1,88 @@
+<%- include('../partials/header')%>
+
+<div class='flight-details'>
+  <section id="show-page">
+    <h1>Flight Information</h1>
+    <table>
+      <thead>
+        <th>Airport</th>
+        <th>Airline</th>
+        <th>Flight Number</th>
+        <th>Departure Time:</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= flight.airport %></td>
+          <td><%= flight.airline %></td>
+          <td><%= flight.flightNo %></td>
+          <td><%= flight.departs %></td>
+      </tbody>
+    </table>
+  </section>
+
+  <% if (flight.destinations.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Airport:</th>
+        <th>Arrival Time:</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% flight.destinations.forEach(function(f) { %>
+      <tr>
+        <td><%= f.airport %></td>
+        <td><%= f.arrival %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <h5><%=flight.destinations.airport%> --- Arrival Time TBD</h5>
+  <% } %>
+</div>
+
+
+
+<span class = 'Inputs'>
+    
+<span class = 'Destinations'>
+<form id="add-review-form" method="POST" action="/flights/<%= flight._id %>/destinations">
+  <label>Arrival Date:</label>
+  <input type="datetime-local" name="arrival">
+  <label>Destination Airport:</label>
+  <select name="airport">
+    <option value="SAN">San Diego</option>
+    <option value="AUS">Austin</option>
+    <option value="LAX">Los Angeles</option>
+    <option value="SEA">Seattle</option>
+    <option value="DAL">Dallas</option>
+  </select>
+  <input type="submit" id = "submit-destination" value="Add Arrival">
+</form>
+</span>
+
+<span class = 'ticket-add'><a href="/flights/<%=flight._id%>/tickets/new">Purchase Ticket</a></span>
+<span class='ticket-list'>
+    <h5>Purchased Tickets</h5>
+      <table>
+        <thead>
+          <th>Seat:</th>
+          <th>Price:</th>
+          <th>Remove Ticket</th>
+        </thead>
+        <tbody>
+          <% tickets.forEach(function(ticket,idx){%>
+          <tr>
+            <td><%= ticket.seat%></td>  
+            <td>$<%= ticket.price%></td>
+            <td><form action="/flights/<%=flight._id%>/tickets/<%=ticket._id%>?_method=DELETE"
+              class="delete-form" method="POST">
+              <button type="submit" class = 'danger'>X</button>
+            </form></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </span>
+</span>
